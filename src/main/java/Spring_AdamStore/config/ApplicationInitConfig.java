@@ -67,7 +67,7 @@ public class ApplicationInitConfig {
                 }
             });
 
-            CompletableFuture.allOf(roleAdminFuture, sizesFuture, provincesFuture).join();
+            // CompletableFuture.allOf(roleAdminFuture, sizesFuture, provincesFuture).join();
 
             log.info("INIT APPLICATION FINISHED SUCCESSFULLY");
         };
