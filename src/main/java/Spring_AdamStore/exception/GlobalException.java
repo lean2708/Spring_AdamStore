@@ -180,5 +180,25 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ErrorResponse> handleAuthException(
+            AuthException exception,
+            WebRequest request
+    ) {
+
+        log.error("Authentication error: {}", exception.getMessage(), exception);
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .code(HttpStatus.UNAUTHORIZED.value())
+                .timestamp(LocalDateTime.now())
+                .path(request.getDescription(false).replace("uri=", ""))
+                .error("Authentication Error")
+                .message(exception.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(errorResponse);
+    }
+
 
 }

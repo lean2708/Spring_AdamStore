@@ -11,6 +11,7 @@ import Spring_AdamStore.service.AuthService;
 import com.nimbusds.jose.JOSEException;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,24 @@ public class AuthController {
 
     private final AuthService authService;
     private final AccountRecoveryService accountRecoveryService;
+
+    @Operation(
+            summary = "Login with Google",
+            description = "Exchange Google authorization code and generate FlyGo access and refresh tokens."
+    )
+    @PostMapping("/public/auth/google")
+    public ApiResponse<TokenResponse> loginWithGoogle(
+            @RequestParam("code") @NotBlank(message = "Google authorization code is required.")
+            String code) throws JOSEException {
+
+        TokenResponse response = authService.loginWithGoogle(code);
+
+        return ApiResponse.<TokenResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Login with Google successfully.")
+                .result(response)
+                .build();
+    }
 
 
     @PostMapping("/public/auth/login")

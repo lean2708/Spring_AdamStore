@@ -1,19 +1,21 @@
 package Spring_AdamStore.service.impl;
 
+import Spring_AdamStore.client.google.GoogleAuthClient;
+import Spring_AdamStore.client.google.GoogleUserInfoClient;
 import Spring_AdamStore.constants.EntityStatus;
 import Spring_AdamStore.constants.RoleEnum;
 import Spring_AdamStore.constants.TokenType;
 import Spring_AdamStore.dto.basic.EntityBasic;
 import Spring_AdamStore.dto.event.EmailEvent;
 import Spring_AdamStore.dto.request.*;
-import Spring_AdamStore.dto.response.TokenResponse;
-import Spring_AdamStore.dto.response.UserResponse;
-import Spring_AdamStore.dto.response.VerificationCodeResponse;
+import Spring_AdamStore.dto.response.*;
 import Spring_AdamStore.entity.nosql.RedisPendingUser;
 import Spring_AdamStore.entity.nosql.RedisRevokedToken;
 import Spring_AdamStore.entity.nosql.RedisVerificationCode;
 import Spring_AdamStore.entity.sql.*;
+import Spring_AdamStore.entity.sql.relationship.UserHasRole;
 import Spring_AdamStore.exception.AppException;
+import Spring_AdamStore.exception.AuthException;
 import Spring_AdamStore.exception.ErrorCode;
 import Spring_AdamStore.mapper.UserMapper;
 import Spring_AdamStore.mapper.UserMappingHelper;
@@ -34,6 +36,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static Spring_AdamStore.constants.EntityStatus.ACTIVE;
@@ -57,6 +60,37 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final UserMappingHelper userMappingHelper;
     private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final GoogleAuthClient googleAuthClient;
+    private final GoogleUserInfoClient googleUserInfoClient;
+
+    @Override
+    @Transactional
+    public TokenResponse loginWithGoogle(String code) throws JOSEException {
+
+        log.info("[START-SERVICE] Login with Google");
+
+        if (code == null || code.isBlank()) {
+            throw new AuthException("Google authorization code is required.");
+        }
+
+        GoogleTokenResponse googleToken = googleAuthClient.exchangeToken(code);
+
+        GoogleUserResponse googleUser = googleUserInfoClient.getUserInfo(googleToken.getAccessToken());
+
+        if (!googleUser.isVerifiedEmail()) {
+            throw new AuthException("Google email is not verified.");
+        }
+
+        User user = userRepository.findByEmail(googleUser.getEmail())
+                .orElseGet(() -> createGoogleUser(googleUser));
+
+        TokenResponse response = generateAndSaveTokenResponse(user);
+
+        log.info("[SUCCESS-SERVICE] Login with Google successfully userId={}, email={}",
+                user.getId(), user.getEmail());
+
+        return response;
+    }
 
 
     @Override
@@ -235,4 +269,26 @@ public class AuthServiceImpl implements AuthService {
             throw new AppException(ErrorCode.EMAIL_DISABLED);
         }
     }
+
+
+    private User createGoogleUser(GoogleUserResponse googleUser) {
+
+        User user = User.builder()
+                .name(googleUser.getName())
+                .email(googleUser.getEmail())
+                .password(passwordEncoder.encode(UUID.randomUUID().toString()))
+                .avatarUrl(googleUser.getPicture())
+                .build();
+
+        userRepository.save(user);
+
+        userHasRoleService.saveUserHasRole(user, RoleEnum.USER);
+        cartService.createCartForUser(user);
+
+        log.info("[SERVICE] Created Google user successfully userId={}, email={}",
+                user.getId(), user.getEmail());
+
+        return user;
+    }
+
 }
