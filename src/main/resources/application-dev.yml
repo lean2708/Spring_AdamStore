@@ -131,3 +131,13 @@ payment:
     command: ${VNPAY_COMMAND}
     order-type: ${VNPAY_ORDER_TYPE}
 
+
+# Google OAuth2
+oauth2:
+  google:
+    client-id: ${OAUTH2_CLIENT_ID}
+    client-secret: ${OAUTH2_CLIENT_SECRET}
+    redirect-uri: ${OAUTH2_REDIRECT_URI}
+    grant-type: ${GOOGLE_GRANT_TYPE}
+    token-url: ${GOOGLE_TOKEN_URL}
+    user-info-url: ${GOOGLE_USERINFO_URL}

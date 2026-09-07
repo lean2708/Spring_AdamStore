@@ -69,6 +69,8 @@ public class ApplicationInitConfig {
 
             CompletableFuture.allOf(roleAdminFuture, sizesFuture, provincesFuture).join();
 
+            log.info("Chúc bản thân năm mới công việc thuận lợi, làm việc vị trí Java với mức lương ổn định 12 triệu/ tháng, chúc gia đình mình sức khỏe");
+
             log.info("INIT APPLICATION FINISHED SUCCESSFULLY");
         };
     }
