@@ -3,6 +3,7 @@ server:
   servlet:
     context-path: /adamstore
 
+
 spring:
   application:
     name: Spring_AdamStore
@@ -10,7 +11,7 @@ spring:
     active: dev
 
 
-  # Max Size Upload
+# Max Size Upload
   servlet:
     multipart:
       max-file-size: 100MB
@@ -22,6 +23,14 @@ app:
     email: admin@gmail.com
     password: 123456
 
+  default-avatar-url: https://yourdomain.com/default-avatar.png
+
+  batch-size:
+    district: 1000
+    ward: 300
+    province: 30
+
+
 auth:
   register:
     verification-code:
@@ -30,3 +39,25 @@ auth:
   forgot-password:
     verification-code:
       expiration-minutes: 10
+
+
+cors:
+  allowed-origins:
+    - http://localhost:3000
+    - http://localhost:5173
+    - http://localhost:3001
+    - http://localhost:5174
+    - ${EXTRA_ORIGIN:https://default.example.com}
+
+
+order:
+  status:
+    processing-to-shipped-days: 1
+    shipped-to-delivered-days: 3
+    pending-to-cancel-days: 1
+
+location:
+  data:
+    province-path: classpath:data/provinces.csv
+    district-path: classpath:data/districts.csv
+    ward-path: classpath:data/wards.csv

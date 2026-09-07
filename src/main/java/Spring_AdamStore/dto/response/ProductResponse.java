@@ -3,9 +3,7 @@ package Spring_AdamStore.dto.response;
 
 import Spring_AdamStore.constants.EntityStatus;
 import Spring_AdamStore.dto.basic.EntityBasic;
-import Spring_AdamStore.dto.basic.ProductVariantBasic;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import Spring_AdamStore.dto.basic.ImageBasic;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
@@ -15,7 +13,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
 @Builder
@@ -23,30 +20,26 @@ import java.util.Set;
 @AllArgsConstructor
 public class ProductResponse {
 
-    Long id;
-    String name;
-    String description;
+    private Long id;
 
-    Boolean isAvailable;
-    Double averageRating;
-    Integer soldQuantity;
-    Integer totalReviews;
-    Integer quantity;
-    Double price;
-    @Enumerated(EnumType.STRING)
-    EntityStatus status;
+    private Boolean isAvailable;
+    private String name;
+    private String description;
 
-    String createdBy;
-    String updatedBy;
-    LocalDate createdAt;
-    LocalDate updatedAt;
+    private Double averageRating;
+    private Integer soldQuantity;
+    private Integer totalReviews;
 
-    EntityBasic category;
+    private Double minPrice;
+    private Double maxPrice;
 
-    Set<EntityBasic> colors;
-    Set<EntityBasic> sizes;
+    private EntityStatus status;
 
-    Set<ProductImageResponse> productImages;
+    private LocalDate createdAt;
+
+    private List<ImageBasic> images;
+
+    private List<ProductVariantResponse> variants;
 
 
 }

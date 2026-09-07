@@ -1,26 +1,42 @@
 
 services:
 
-  mysql-devjob:
-    image: mysql:8.0.41-debian
-    container_name: mysql-adam-store
+  postgres-adam-store:
+    image: postgres:15
+    container_name: postgres-adam-store
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: adamstore
+      POSTGRES_DB: adam-store
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
     volumes:
-      - adam_store_data:/var/lib/mysql
-      - ./initdb.sql:/docker-entrypoint-initdb.d/init.sql
+      - adam_postgresql_data:/var/lib/postgresql/data
     ports:
-      - '3308:3306'
+      - '5433:5432'
     networks:
-      - adamstore_backend
+      - adam_store_backend
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p123456" ]
+      test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 30s
       retries: 5
       start_period: 30s
       timeout: 10s
+
+
+  mongodb-adam-store:
+    image: mongo:6.0
+    container_name: mongodb-adam-store
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+      MONGO_INITDB_DATABASE: adam-chat
+    ports:
+      - '27018:27017'
+    volumes:
+      - mongodb_adam_data:/data/db
+    networks:
+      - adam_store_backend
 
 
   redis:
@@ -36,7 +52,39 @@ services:
       - REDIS_DISABLE_COMMANDS=FLUSHDB;FLUSHALL
     command: redis-server --requirepass 123456
     networks:
-      - adamstore_backend
+      - adam_store_backend
+
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper-adam-store
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - adam_store_backend
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka-adam-store
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - kafka_adam_data:/var/lib/kafka/data
+    networks:
+      - adam_store_backend
 
 
   spring-adam-store:
@@ -50,15 +98,19 @@ services:
     ports:
       - '8080:8080'
     networks:
-      - adamstore_backend
+      - adam_store_backend
     depends_on:
-      mysql-devjob:
+      postgres-adam-store:
         condition: service_healthy
 
 networks:
-  adamstore_backend:
+  adam_store_backend:
     driver: bridge
 
 volumes:
-  adam_store_data:
+  adam_postgresql_data:
+    driver: local
+  mongodb_adam_data:
+    driver: local
+  kafka_adam_data:
     driver: local

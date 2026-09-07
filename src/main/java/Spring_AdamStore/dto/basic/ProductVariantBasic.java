@@ -9,9 +9,9 @@ import lombok.*;
 @Builder
 public class ProductVariantBasic {
 
-    Long id;
+    private Long id;
 
-    EntityBasic color;
-    EntityBasic size;
-    EntityBasic product;
+    private EntityBasic color;
+    private EntityBasic size;
+    private EntityBasic product;
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Slf4j
+@Slf4j(topic = "AUDITOR-AWARE")
 public class AuditorAwareImpl implements AuditorAware<String> {
 
     @Override

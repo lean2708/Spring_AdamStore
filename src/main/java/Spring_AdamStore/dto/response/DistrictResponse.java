@@ -10,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
 @Builder
@@ -18,8 +17,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class DistrictResponse {
 
-    Long id;
-    String name;
+    private Long id;
+    private String name;
 
 
 }

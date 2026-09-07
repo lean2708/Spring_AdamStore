@@ -10,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
 @Builder
@@ -18,14 +17,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class CategoryResponse {
 
-    Long id;
-    String name;
-    String description;
-    @Enumerated(EnumType.STRING)
-    EntityStatus status;
-    
-    String createdBy;
-    String updatedBy;
-    LocalDate createdAt;
-    LocalDate updatedAt;
+    private Long id;
+    private String name;
+    private String imageUrl;
+    private EntityStatus status;
+
+    private String createdBy;
+    private String updatedBy;
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
 }

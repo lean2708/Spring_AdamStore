@@ -13,14 +13,14 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PermissionResponse {
-    Long id;
-    String name;
 
-    String module;
-    String apiPath;
-    String method;
+    private Long id;
+    private String name;
+
+    private String module;
+    private String apiPath;
+    private String method;
 
 
 }

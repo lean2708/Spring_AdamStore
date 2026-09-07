@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
 @Builder
@@ -14,8 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class VerificationCodeResponse {
 
-    String email;;
-    String verificationCode;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    LocalDateTime expirationTime;
+    private String email;
+    private String verificationCode;
+    private Long ttl;
 }

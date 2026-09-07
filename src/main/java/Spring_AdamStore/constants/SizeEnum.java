@@ -1,13 +1,10 @@
 package Spring_AdamStore.constants;
 
-import Spring_AdamStore.entity.Province;
-import Spring_AdamStore.entity.Size;
+import Spring_AdamStore.entity.sql.Size;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public enum SizeEnum {
     XS,

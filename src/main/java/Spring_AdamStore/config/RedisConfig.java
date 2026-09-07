@@ -10,7 +10,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
-@Slf4j
+@Slf4j(topic = "REDIS-CONFIG")
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {

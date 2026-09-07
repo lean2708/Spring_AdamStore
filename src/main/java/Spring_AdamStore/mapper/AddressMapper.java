@@ -1,28 +1,25 @@
 package Spring_AdamStore.mapper;
 
 import Spring_AdamStore.dto.request.AddressRequest;
-import Spring_AdamStore.dto.request.BranchRequest;
 import Spring_AdamStore.dto.response.AddressResponse;
-import Spring_AdamStore.dto.response.BranchResponse;
-import Spring_AdamStore.entity.Address;
-import Spring_AdamStore.entity.Branch;
+import Spring_AdamStore.entity.sql.Address;
 import org.mapstruct.*;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 @Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface AddressMapper {
 
     Address toAddress(AddressRequest request);
 
-    @Mapping(target = "userName", source = "user.email")
-    AddressResponse toAddressResponse(Address address);
+
+    @Mapping(target = "province", expression = "java(context.getProvince(address.getProvinceId()))")
+    @Mapping(target = "district", expression = "java(context.getDistrict(address.getDistrictId()))")
+    @Mapping(target = "ward", expression = "java(context.getWard(address.getWardCode()))")
+    AddressResponse toAddressResponse(Address address, @Context AddressMappingHelper context);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(@MappingTarget Address address, AddressRequest request);
 
-    List<AddressResponse> toAddressResponseList(List<Address> addressList);
+    List<AddressResponse> toAddressResponseList(List<Address> addressList, @Context AddressMappingHelper context);
 }

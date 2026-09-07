@@ -1,6 +1,6 @@
 package Spring_AdamStore.service;
 
-import Spring_AdamStore.entity.RedisRevokedToken;
+import Spring_AdamStore.entity.nosql.RedisRevokedToken;
 
 public interface RedisTokenService {
 

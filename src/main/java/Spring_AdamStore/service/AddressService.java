@@ -6,6 +6,7 @@ import Spring_AdamStore.dto.response.AddressResponse;
 import Spring_AdamStore.dto.response.BranchResponse;
 import Spring_AdamStore.dto.response.PageResponse;
 import jakarta.validation.constraints.Min;
+import org.springframework.data.domain.Pageable;
 
 public interface AddressService {
 
@@ -13,7 +14,7 @@ public interface AddressService {
 
     AddressResponse fetchById(Long id);
 
-    PageResponse<AddressResponse> fetchAllForAdmin(int pageNo, int pageSize, String sortBy);
+    PageResponse<AddressResponse> fetchAllForAdmin(Pageable pageable);
 
     AddressResponse update(Long id, AddressRequest request);
 
@@ -22,5 +23,6 @@ public interface AddressService {
     void delete(Long id);
 
     AddressResponse restore(long id);
+
 
 }

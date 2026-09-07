@@ -1,11 +1,11 @@
 package Spring_AdamStore.dto.response;
 
+import Spring_AdamStore.dto.basic.ImageBasic;
 import Spring_AdamStore.dto.basic.ProductVariantBasic;
-import jakarta.persistence.JoinColumn;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -13,10 +13,13 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public class CartItemResponse {
 
-    Long id;
+    private Long id;
 
-    Double price;
-    Integer quantity;
+    private Double price;
+    private Integer quantity;
+    private LocalDateTime createdAt;
 
-    ProductVariantBasic productVariantBasic;
+    private ImageBasic image;
+
+    private ProductVariantBasic productVariantBasic;
 }

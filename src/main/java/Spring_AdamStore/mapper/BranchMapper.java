@@ -3,7 +3,7 @@ package Spring_AdamStore.mapper;
 import Spring_AdamStore.dto.request.BranchRequest;
 import Spring_AdamStore.dto.request.BranchUpdateRequest;
 import Spring_AdamStore.dto.response.BranchResponse;
-import Spring_AdamStore.entity.Branch;
+import Spring_AdamStore.entity.sql.Branch;
 import org.mapstruct.*;
 
 import java.util.List;

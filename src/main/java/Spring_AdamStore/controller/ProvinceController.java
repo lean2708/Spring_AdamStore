@@ -8,6 +8,9 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +24,11 @@ public class ProvinceController {
 
     private final ProvinceService provinceService;
 
-    @GetMapping("/provinces/{id}")
+    @GetMapping("/private/provinces/{id}")
     public ApiResponse<ProvinceResponse> fetchById(@Min(value = 1, message = "ID phải lớn hơn 0")
-                                                    @PathVariable Long id){
+                                                    @PathVariable Integer id){
+        log.info("Received request to fetch province by id: {}", id);
+
         return ApiResponse.<ProvinceResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Fetch Province By Id")
@@ -31,29 +36,28 @@ public class ProvinceController {
                 .build();
     }
 
-    @GetMapping("/provinces")
-    public ApiResponse<PageResponse<ProvinceResponse>> fetchAll(@Min(value = 1, message = "pageNo phải lớn hơn 0")
-                                                                 @RequestParam(defaultValue = "1") int pageNo,
-                                                                 @RequestParam(defaultValue = "10") int pageSize,
-                                                                 @RequestParam(required = false) String sortBy){
+    @GetMapping("/private/provinces")
+    public ApiResponse<PageResponse<ProvinceResponse>> fetchAll(@ParameterObject @PageableDefault Pageable pageable){
+        log.info("Received request to fetch all province");
+
         return ApiResponse.<PageResponse<ProvinceResponse>>builder()
                 .code(HttpStatus.OK.value())
-                .result(provinceService.fetchAll(pageNo, pageSize, sortBy))
+                .result(provinceService.fetchAll(pageable))
                 .message("Fetch All Provinces With Pagination")
                 .build();
     }
 
     @Operation(description = "API dùng để lấy danh sách districts theo province")
-    @GetMapping("/provinces/{provinceId}/districts")
-    public ApiResponse<PageResponse<DistrictResponse>> fetchByProvinceId(@RequestParam(defaultValue = "1") int pageNo,
-                                                                         @RequestParam(defaultValue = "10") int pageSize,
-                                                                         @RequestParam(required = false) String sortBy,
+    @GetMapping("/private/provinces/{provinceId}/districts")
+    public ApiResponse<PageResponse<DistrictResponse>> fetchDistrictsByProvince(@ParameterObject @PageableDefault Pageable pageable,
                                                                          @Min(value = 1, message = "provinceId phải lớn hơn 0")
                                                                          @PathVariable Integer provinceId){
+        log.info("Received request to fetch all District By Province");
+
         return ApiResponse.<PageResponse<DistrictResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Fetch Districts By Province ID With Pagination")
-                .result(provinceService.fetchDistrictsByProvinceId(pageNo, pageSize, sortBy, provinceId))
+                .result(provinceService.fetchDistrictsByProvinceId(pageable, provinceId))
                 .build();
     }
 

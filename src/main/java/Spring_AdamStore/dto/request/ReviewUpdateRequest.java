@@ -1,15 +1,15 @@
 package Spring_AdamStore.dto.request;
 
-import jakarta.validation.constraints.*;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Getter
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReviewUpdateRequest {
 
-    Double rating;
-    String comment;
+    private Double rating;
+    private String comment;
+    private List<String> imageUrls;
+
 
 }

@@ -1,22 +1,18 @@
 package Spring_AdamStore.mapper;
 
-import Spring_AdamStore.dto.response.CartItemResponse;
 import Spring_AdamStore.dto.response.OrderItemResponse;
-import Spring_AdamStore.entity.CartItem;
-import Spring_AdamStore.entity.OrderItem;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValueCheckStrategy;
+import Spring_AdamStore.entity.sql.OrderItem;
+import org.mapstruct.*;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface OrderItemMapper {
 
-    @Mapping(target = "productVariant", source = "productVariant")
-    OrderItemResponse toOrderItemResponse(OrderItem orderItem);
+    @Mapping(target = "productVariant", expression = "java(context.getProductVariantBasic(orderItem.getProductVariantId()))")
+    @Mapping(target = "image", expression = "java(context.getImageBasic(orderItem.getProductVariantId()))")
+    OrderItemResponse toOrderItemResponse(OrderItem orderItem, @Context OrderItemMappingHelper context);
 
-    List<OrderItemResponse> toOrderItemResponseList(List<OrderItem> orderItemList);
+    List<OrderItemResponse> toOrderItemResponseList(List<OrderItem> orderItemList, @Context OrderItemMappingHelper context);
 
 }

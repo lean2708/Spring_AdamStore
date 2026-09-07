@@ -58,7 +58,7 @@ public enum ErrorCode {
     PRODUCT_VARIANT_EXISTED(1046, "ProductVariant đã tồn tại trong hệ thống", HttpStatus.BAD_REQUEST),
     PRODUCT_VARIANT_NOT_EXISTED(1047, "ProductVariant không tồn tại trong hệ thống", HttpStatus.NOT_FOUND),
     OUT_OF_STOCK(1048, "Không đủ hàng trong kho", HttpStatus.BAD_REQUEST),
-    INVALID_PRODUCT_IMAGE_LIST(1049, "Danh sách ProductImage không hợp lệ", HttpStatus.BAD_REQUEST),
+    INVALID_IMAGE_LIST(1049, "Danh sách Image không hợp lệ", HttpStatus.BAD_REQUEST),
     INVALID_PRODUCT_COLOR_LIST(1050, "Danh sách Color không hợp lệ", HttpStatus.BAD_REQUEST),
     INVALID_PRODUCT_SIZE_LIST(1051, "Danh sách Size không hợp lệ", HttpStatus.BAD_REQUEST),
     CODE_TYPE_INVALID(1052, "Loại verificationCode không hợp lệ", HttpStatus.UNAUTHORIZED),
@@ -79,7 +79,13 @@ public enum ErrorCode {
     PRODUCT_VARIANT_USED_IN_ORDER(1067, "Không thể xóa mềm Product (Product Variant) vì đã được sử dụng trong đơn hàng.", HttpStatus.FORBIDDEN),
     COLOR_HAS_USED_VARIANT(1068, "Không thể xóa màu vì có product variant đã sử dụng color này.", HttpStatus.FORBIDDEN),
     DEFAULT_ADDRESS_CANNOT_BE_DELETED(1069, "Không thể xóa địa chỉ mặc định", HttpStatus.BAD_REQUEST),
-    ADDRESS_USED_IN_ORDER(1070, "Địa chỉ đã được sử dụng trong đơn hàng", HttpStatus.BAD_REQUEST)
+    ADDRESS_USED_IN_ORDER(1070, "Địa chỉ đã được sử dụng trong đơn hàng", HttpStatus.BAD_REQUEST),
+    FILE_NOT_EXISTED(1071, "File không tồn tại trong hệ thống", HttpStatus.NOT_FOUND),
+    ORDER_CANNOT_BE_CANCELLED(1072, "Đơn hàng không thể huỷ vì không ở trạng thái cho phép (PENDING hoặc PROCESSING)", HttpStatus.BAD_REQUEST),
+    CONVERSATION_NOT_FOUND(1073, "Không tìm thấy conversation", HttpStatus.NOT_FOUND),
+    NOT_A_PARTICIPANT(1074, "Bạn không có quyền truy cập cuộc hội thoại này", HttpStatus.FORBIDDEN),
+    MESSAGE_NOT_FOUND(1075,"Message not found", HttpStatus.NOT_FOUND)
+
     ;
 
 

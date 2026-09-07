@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchCriteriaQueryConsumer implements Consumer<SearchCriteria> {
+
     CriteriaBuilder builder;
     Predicate predicate;
     Root root;
@@ -20,12 +21,17 @@ public class SearchCriteriaQueryConsumer implements Consumer<SearchCriteria> {
     public void accept(SearchCriteria param) {
         if(param.getOperation().equals(">")){
             predicate = builder.and(predicate, builder.greaterThanOrEqualTo(root.get(param.getKey()), param.getValue().toString()));
-        }else if(param.getOperation().equals("<")){
+        }
+        else if(param.getOperation().equals("<")){
             predicate = builder.and(predicate, builder.lessThanOrEqualTo(root.get(param.getKey()), param.getValue().toString()));
-        } else{
+        }
+        else{
+            // String => LIKE
             if(root.get(param.getKey()).getJavaType().equals(String.class)){
-                predicate = builder.and(predicate, builder.like(root.get(param.getKey()),"%" + param.getValue().toString() + "%"));
-            }else{
+                predicate = builder.and(predicate, builder.like(builder.lower(root.get(param.getKey())),"%" + param.getValue().toString().toLowerCase() + "%"));
+            }
+            // equals =
+            else if (param.getOperation().equals("=")) {
                 predicate = builder.and(predicate, builder.equal(root.get(param.getKey()), param.getValue().toString()));
             }
         }

@@ -6,6 +6,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class AppException extends RuntimeException{
+
     private ErrorCode errorCode;
 
     public AppException(ErrorCode errorCode) {

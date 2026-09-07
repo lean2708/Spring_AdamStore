@@ -13,14 +13,13 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class TokenResponse {
 
-    String accessToken;
-    String refreshToken;
-    boolean authenticated;
-    String email;
+    private String accessToken;
+    private String refreshToken;
+    private boolean authenticated;
+    private String email;
 
-    Set<EntityBasic> roles;
+    private Set<EntityBasic> roles;
 
 }

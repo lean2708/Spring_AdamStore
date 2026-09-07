@@ -6,7 +6,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import java.time.LocalDateTime;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
 @Builder
@@ -14,13 +13,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PaymentHistoryResponse {
 
-    Long id;
-    Boolean isPrimary;
+    private Long id;
+    private Boolean isPrimary;
 
-    String paymentMethod;
-    Double totalAmount;
-    PaymentStatus paymentStatus;
+    private String paymentMethod;
+    private Double totalAmount;
+    private PaymentStatus paymentStatus;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    LocalDateTime paymentTime;
-    String note;
+    private LocalDateTime paymentTime;
 }

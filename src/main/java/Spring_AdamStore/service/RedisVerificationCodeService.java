@@ -1,7 +1,7 @@
 package Spring_AdamStore.service;
 
 import Spring_AdamStore.constants.VerificationType;
-import Spring_AdamStore.entity.RedisVerificationCode;
+import Spring_AdamStore.entity.nosql.RedisVerificationCode;
 
 public interface RedisVerificationCodeService {
 

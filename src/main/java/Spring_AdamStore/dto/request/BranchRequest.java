@@ -7,14 +7,13 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
 @Getter
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class BranchRequest {
 
     @NotBlank(message = "name không được để trống")
-    String name;
+    private String name;
     @NotBlank(message = "location không được để trống")
-    String location;
+    private String location;
     @Pattern(regexp = "^0[35789]\\d{8}$", message = "Số điện thoại phải có 10 số và bắt đầu bằng 0")
     @NotBlank(message = "phone không được để trống")
-    String phone;
+    private String phone;
 }

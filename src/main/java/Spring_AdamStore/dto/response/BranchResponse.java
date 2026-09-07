@@ -10,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
 @Builder
@@ -18,15 +17,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class BranchResponse {
 
-    Long id;
-    String name;
-    String location;
-    String phone;
-    @Enumerated(EnumType.STRING)
-    EntityStatus status;
+    private Long id;
+    private String name;
+    private String location;
+    private String phone;
+    private EntityStatus status;
 
-    String createdBy;
-    String updatedBy;
-    LocalDate createdAt;
-    LocalDate updatedAt;
+    private String createdBy;
+    private String updatedBy;
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
 }

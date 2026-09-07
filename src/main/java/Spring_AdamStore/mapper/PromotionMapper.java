@@ -4,7 +4,7 @@ package Spring_AdamStore.mapper;
 import Spring_AdamStore.dto.request.PromotionRequest;
 import Spring_AdamStore.dto.request.PromotionUpdateRequest;
 import Spring_AdamStore.dto.response.PromotionResponse;
-import Spring_AdamStore.entity.Promotion;
+import Spring_AdamStore.entity.sql.Promotion;
 import org.mapstruct.*;
 
 import java.util.List;

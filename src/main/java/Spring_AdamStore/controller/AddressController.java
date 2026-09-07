@@ -11,7 +11,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +28,13 @@ public class AddressController {
 
     private final AddressService addressService;
 
-    @PostMapping("/addresses")
+
+    @Operation(summary = "Create New Address",
+            description = "Api dùng để tạo địa chỉ mới")
+    @PostMapping("/private/addresses")
     public ApiResponse<AddressResponse> create(@Valid @RequestBody AddressRequest request){
+        log.info("Received request to create address: {}", request);
+
         return ApiResponse.<AddressResponse>builder()
                 .code(HttpStatus.CREATED.value())
                 .message("Create Address")
@@ -34,9 +43,11 @@ public class AddressController {
     }
 
 
-    @GetMapping("/addresses/{id}")
+    @GetMapping("/private/addresses/{id}")
     public ApiResponse<AddressResponse> fetchById(@Min(value = 1, message = "ID phải lớn hơn 0")
                                                  @PathVariable Long id){
+        log.info("Received request to fetch address by id: {}", id);
+
         return ApiResponse.<AddressResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Fetch Address By Id")
@@ -44,23 +55,27 @@ public class AddressController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Fetch All Addresses For Admin",
-    description = "API này để lấy tất cả address bên trong hệ thống")
-    @GetMapping("/addresses")
-    public ApiResponse<PageResponse<AddressResponse>> fetchAllForAdmin(@Min(value = 1, message = "pageNo phải lớn hơn 0")
-                                                              @RequestParam(defaultValue = "1") int pageNo,
-                                                              @RequestParam(defaultValue = "10") int pageSize,
-                                                              @RequestParam(required = false) String sortBy){
+    description = "API này để lấy tất cả address bên trong hệ thống (page bắt đầu từ 0)")
+    @GetMapping("/admin/addresses")
+    public ApiResponse<PageResponse<AddressResponse>> fetchAllForAdmin(@ParameterObject @PageableDefault Pageable pageable){
+        log.info("Received request to fetch all addresses for Admin");
+
         return ApiResponse.<PageResponse<AddressResponse>>builder()
                 .code(HttpStatus.OK.value())
-                .result(addressService.fetchAllForAdmin(pageNo, pageSize, sortBy))
+                .result(addressService.fetchAllForAdmin(pageable))
                 .message("Fetch All Addresses For Admin")
                 .build();
     }
 
-    @PutMapping("/addresses/{id}")
+
+    @Operation(description = "API để update địa chỉ")
+    @PutMapping("/private/addresses/{id}")
     public ApiResponse<AddressResponse> update(@Min(value = 1, message = "ID phải lớn hơn 0")
                                               @PathVariable Long id, @Valid @RequestBody AddressRequest request){
+        log.info("Received request to update address: {}, with address id: {}", request, id);
+
         return ApiResponse.<AddressResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Update Address By Id")
@@ -68,11 +83,14 @@ public class AddressController {
                 .build();
     }
 
+
     @Operation(summary = "Hide User Address",
-    description = "Api này cho phép user xóa địa chỉ của hộ trong giao diện người dùng")
-    @PatchMapping("/addresses/{id}/hide")
+    description = "Api này cho phép user xóa địa chỉ của chính user đó trong giao diện người dùng")
+    @PatchMapping("/private/addresses/{id}/hide")
     public ApiResponse<Void> hideAddress(@Min(value = 1, message = "ID phải lớn hơn 0")
                                                @PathVariable Long id){
+        log.info("Received request to hide address by id: {}", id);
+
         addressService.hideAddress(id);
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
@@ -81,11 +99,14 @@ public class AddressController {
                 .build();
     }
 
+
     @Operation(summary = "Soft Delete Address",
     description = "API để Admin xóa mềm address")
-    @DeleteMapping("/addresses/{id}")
+    @DeleteMapping("/admin/addresses/{id}")
     public ApiResponse<Void> delete(@Min(value = 1, message = "ID phải lớn hơn 0")
                                     @PathVariable Long id){
+        log.info("Received request to delete address by id: {}", id);
+
         addressService.delete(id);
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.NO_CONTENT.value())
@@ -94,11 +115,14 @@ public class AddressController {
                 .build();
     }
 
+
     @Operation(summary = "Restore Address",
             description = "Api này để khôi phục Address")
-    @PatchMapping("/addresses/{id}/restore")
+    @PatchMapping("/admin/addresses/{id}/restore")
     public ApiResponse<AddressResponse> restore(@Min(value = 1, message = "Id phải lớn hơn 0")
                                                @PathVariable long id) {
+        log.info("Received request to restore address by id: {}", id);
+
         return ApiResponse.<AddressResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Restore Address By Id")

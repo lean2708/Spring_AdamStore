@@ -1,14 +1,14 @@
 package Spring_AdamStore.service.relationship;
 
-import Spring_AdamStore.constants.EntityStatus;
 import Spring_AdamStore.constants.RoleEnum;
-import Spring_AdamStore.entity.Role;
-import Spring_AdamStore.entity.User;
-import Spring_AdamStore.entity.relationship.UserHasRole;
+import Spring_AdamStore.entity.sql.Role;
+import Spring_AdamStore.entity.sql.User;
+import Spring_AdamStore.entity.sql.relationship.UserHasRole;
+import Spring_AdamStore.entity.sql.relationship.UserHasRoleId;
 import Spring_AdamStore.exception.AppException;
 import Spring_AdamStore.exception.ErrorCode;
-import Spring_AdamStore.repository.RoleRepository;
-import Spring_AdamStore.repository.relationship.UserHasRoleRepository;
+import Spring_AdamStore.repository.sql.RoleRepository;
+import Spring_AdamStore.repository.sql.relationship.UserHasRoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,18 +25,10 @@ public class UserHasRoleService {
         Role role = roleRepository.findByName(roleEnum.name())
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
 
-        return userHasRoleRepository.save(new UserHasRole(user, role));
+        UserHasRole userHasRole = UserHasRole.builder()
+                .id(new UserHasRoleId(user.getId(), role.getId()))
+                .build();
+
+        return userHasRoleRepository.save(userHasRole);
     }
-
-    public UserHasRole findUserHasRole(User user, RoleEnum roleEnum){
-        Role role = roleRepository.findByName(roleEnum.name())
-                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
-
-        return userHasRoleRepository.findUserHasRoleByUserAndRole(user, role);
-    }
-
-    public boolean checkRoleForUser(User user, RoleEnum roleEnum){
-        return findUserHasRole(user, roleEnum) != null;
-    }
-
 }

@@ -1,9 +1,7 @@
 package Spring_AdamStore.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 
@@ -12,14 +10,17 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReviewResponse {
 
-    Long id;
-    Double rating;
-    String comment;
+    private Long id;
 
+    private String userName;
+    private String userAvatarUrl;
 
-    LocalDate createdAt;
-    LocalDate updatedAt;
+    private Double rating;
+    private String comment;
+    private JsonNode imageUrls;
+
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
 }

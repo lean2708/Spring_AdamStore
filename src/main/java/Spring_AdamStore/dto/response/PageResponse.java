@@ -10,11 +10,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PageResponse<T> {
-     int page;
-     int size;
-     long totalPages;
-     long totalItems;
-     List<T> items;
+
+     private int page;
+     private int size;
+     private long totalPages;
+     private long totalItems;
+     private List<T> items;
 }

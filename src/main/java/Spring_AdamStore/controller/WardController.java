@@ -9,6 +9,9 @@ import Spring_AdamStore.service.WardService;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +25,10 @@ public class WardController {
 
     private final WardService wardService;
 
-    @GetMapping("/wards/{code}")
-    public ApiResponse<WardResponse> fetchById(@Min(value = 1, message = "code phải lớn hơn 0")
-                                                   @PathVariable String code){
+    @GetMapping("/private/wards/{code}")
+    public ApiResponse<WardResponse> fetchById(@PathVariable String code){
+        log.info("Received request to fetch ward by code: {}", code);
+
         return ApiResponse.<WardResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Fetch Ward By Id")
@@ -32,14 +36,13 @@ public class WardController {
                 .build();
     }
 
-    @GetMapping("/wards")
-    public ApiResponse<PageResponse<WardResponse>> fetchAll(@Min(value = 1, message = "pageNo phải lớn hơn 0")
-                                                                @RequestParam(defaultValue = "1") int pageNo,
-                                                                @RequestParam(defaultValue = "10") int pageSize,
-                                                                @RequestParam(required = false) String sortBy){
+    @GetMapping("/private/wards")
+    public ApiResponse<PageResponse<WardResponse>> fetchAll(@ParameterObject @PageableDefault Pageable pageable){
+        log.info("Received request to fetch all ward");
+
         return ApiResponse.<PageResponse<WardResponse>>builder()
                 .code(HttpStatus.OK.value())
-                .result(wardService.fetchAll(pageNo, pageSize, sortBy))
+                .result(wardService.fetchAll(pageable))
                 .message("Fetch All Wards With Pagination")
                 .build();
     }

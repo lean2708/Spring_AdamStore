@@ -3,13 +3,14 @@ package Spring_AdamStore.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@FieldDefaults(level = AccessLevel.PUBLIC)
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class VNPayResponse {
-    String code;
-    String message;
-    String paymentUrl;
+
+    private String code;
+    private String message;
+    private String paymentUrl;
 }

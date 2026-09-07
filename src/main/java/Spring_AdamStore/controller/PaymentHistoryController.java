@@ -10,8 +10,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,24 +33,26 @@ public class PaymentHistoryController {
 
 
     @Operation(description = "Api này dùng để tìm kiếm Payment-History")
-    @GetMapping("/payment-histories/search")
-    public ApiResponse<PageResponse<PaymentHistoryResponse>> searchPaymentHistories(@Min(value = 1, message = "pageNo phải lớn hơn 0")
-                                                                    @RequestParam(defaultValue = "1") int pageNo,
-                                                                                  @RequestParam(defaultValue = "10") int pageSize,
-                                                                                  @RequestParam(required = false) String sortBy,
-                                                                                  @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-                                                                                  @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+    @GetMapping("/admin/payment-histories/search")
+    public ApiResponse<PageResponse<PaymentHistoryResponse>> searchPaymentHistories(@ParameterObject @PageableDefault Pageable pageable,
+                                                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
                                                                                   @RequestParam(required = false) PaymentStatus paymentStatus){
+        log.info("Received search request for Payment-Histories: startDate={}, endDate={}, status={}", startDate, endDate, paymentStatus);
+
         return ApiResponse.<PageResponse<PaymentHistoryResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Search Payment-History")
-                .result(paymentHistoryService.searchPaymentHistories(pageNo, pageSize, sortBy, startDate, endDate, paymentStatus))
+                .result(paymentHistoryService.searchPaymentHistories(pageable, startDate, endDate, paymentStatus))
                 .build();
     }
 
-    @DeleteMapping("/payment-histories/{id}")
+
+    @DeleteMapping("/admin/payment-histories/{id}")
     public ApiResponse<Void> delete(@Min(value = 1, message = "ID phải lớn hơn 0")
                                     @PathVariable Long id){
+        log.info("Received request to delete Payment-History with id: {}", id);
+
         paymentHistoryService.delete(id);
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.NO_CONTENT.value())

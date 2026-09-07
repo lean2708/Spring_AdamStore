@@ -7,6 +7,7 @@ import Spring_AdamStore.dto.response.BranchResponse;
 import Spring_AdamStore.dto.response.CategoryResponse;
 import Spring_AdamStore.dto.response.PageResponse;
 import jakarta.validation.constraints.Min;
+import org.springframework.data.domain.Pageable;
 
 public interface BranchService {
 
@@ -14,13 +15,13 @@ public interface BranchService {
 
     BranchResponse fetchById(Long id);
 
-    PageResponse<BranchResponse> fetchAll(int pageNo, int pageSize, String sortBy);
+    PageResponse<BranchResponse> fetchAll(Pageable pageable);
 
     BranchResponse update(Long id, BranchUpdateRequest request);
 
     void delete(Long id);
 
-    PageResponse<BranchResponse> fetchAllBranchesForAdmin(int pageNo, int pageSize, String sortBy);
+    PageResponse<BranchResponse> fetchAllBranchesForAdmin(Pageable pageable);
 
     BranchResponse restore(long id);
 }

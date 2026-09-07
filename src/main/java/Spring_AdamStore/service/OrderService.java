@@ -1,29 +1,29 @@
 package Spring_AdamStore.service;
 
+import Spring_AdamStore.constants.OrderStatus;
 import Spring_AdamStore.dto.request.OrderRequest;
-import Spring_AdamStore.dto.request.PaymentCallbackRequest;
-import Spring_AdamStore.dto.request.UpdateOrderAddressRequest;
+import Spring_AdamStore.dto.request.OrderAddressRequest;
 import Spring_AdamStore.dto.response.OrderResponse;
 import Spring_AdamStore.dto.response.PageResponse;
-import Spring_AdamStore.dto.response.ShippingFeeResponse;
-import Spring_AdamStore.dto.response.VNPayResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderService {
 
     OrderResponse create(OrderRequest request);
 
-    OrderResponse fetchById(Long id);
+    OrderResponse fetchDetailById(Long id);
 
-    PageResponse<OrderResponse> fetchAll(int pageNo, int pageSize, String sortBy);
-
-    OrderResponse updateAddress(Long id, UpdateOrderAddressRequest request);
+    OrderResponse updateAddress(Long id, OrderAddressRequest request);
 
     void delete(Long id);
 
-    PageResponse<OrderResponse> searchOrder(int pageNo, int pageSize, String sortBy, List<String> search);
+    OrderResponse cancelOrder(Long orderId);
+
+    List<OrderResponse> getOrdersForUser(OrderStatus orderStatus);
+
+    PageResponse<OrderResponse> searchOrdersForAdmin(Pageable pageable, LocalDate startDate, LocalDate endDate, OrderStatus orderStatus);
 }

@@ -2,12 +2,12 @@ package Spring_AdamStore.dto.response;
 
 import Spring_AdamStore.constants.EntityStatus;
 import Spring_AdamStore.dto.basic.EntityBasic;
+import Spring_AdamStore.dto.basic.ImageBasic;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
 @Builder
@@ -15,15 +15,14 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public class ProductVariantResponse {
 
-    Long id;
+    private Long id;
 
-    Double price;
-    Integer quantity;
-    Boolean isAvailable;
-    @Enumerated(EnumType.STRING)
-    EntityStatus status;
+    private Double price;
+    private Integer quantity;
+    private Boolean isAvailable;
 
-    EntityBasic product;
-    EntityBasic size;
-    EntityBasic color;
+    private EntityStatus status;
+
+    private EntityBasic size;
+    private EntityBasic color;
 }

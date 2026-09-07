@@ -8,5 +8,11 @@ public interface InitService {
 
     void initSizes();
 
+    void importProvincesFromCsv();
+
+    void importDistrictsFromCsv();
+
+    void importWardFromCsv();
+
     void initProvinces();
 }

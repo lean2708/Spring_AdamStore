@@ -1,7 +1,7 @@
 package Spring_AdamStore.mapper;
 
 import Spring_AdamStore.dto.response.PaymentHistoryResponse;
-import Spring_AdamStore.entity.PaymentHistory;
+import Spring_AdamStore.entity.sql.PaymentHistory;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
 

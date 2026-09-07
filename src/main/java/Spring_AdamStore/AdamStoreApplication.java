@@ -3,11 +3,14 @@ package Spring_AdamStore;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 
+
+@EnableFeignClients
 @SpringBootApplication
+@ConfigurationPropertiesScan
 public class AdamStoreApplication {
 
 

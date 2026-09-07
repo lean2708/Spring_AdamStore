@@ -6,6 +6,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +22,11 @@ public class DistrictController {
 
     private final DistrictService districtService;
 
-    @GetMapping("/districts/{id}")
+    @GetMapping("/private/districts/{id}")
     public ApiResponse<DistrictResponse> fetchById(@Min(value = 1, message = "ID phải lớn hơn 0")
-                                                   @PathVariable Long id){
+                                                   @PathVariable Integer id){
+        log.info("Received request to fetch District by id: {}", id);
+
         return ApiResponse.<DistrictResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Fetch District By Id")
@@ -29,30 +34,28 @@ public class DistrictController {
                 .build();
     }
 
-    @GetMapping("/districts")
-    public ApiResponse<PageResponse<DistrictResponse>> fetchAll(@Min(value = 1, message = "pageNo phải lớn hơn 0")
-                                                                @RequestParam(defaultValue = "1") int pageNo,
-                                                                @RequestParam(defaultValue = "10") int pageSize,
-                                                                @RequestParam(required = false) String sortBy){
+    @GetMapping("/private/districts")
+    public ApiResponse<PageResponse<DistrictResponse>> fetchAll(@ParameterObject @PageableDefault Pageable pageable){
+        log.info("Received request to fetch all District");
+
         return ApiResponse.<PageResponse<DistrictResponse>>builder()
                 .code(HttpStatus.OK.value())
-                .result(districtService.fetchAll(pageNo, pageSize, sortBy))
+                .result(districtService.fetchAll(pageable))
                 .message("Fetch All Districts With Pagination")
                 .build();
     }
 
     @Operation(description = "API dùng để lấy danh sách wards theo district")
-    @GetMapping("/districts/{districtId}/wards")
-    public ApiResponse<PageResponse<WardResponse>> fetchWardsByDistrict(@Min(value = 1, message = "pageNo phải lớn hơn 0")
-                                                                            @RequestParam(defaultValue = "1") int pageNo,
-                                                                        @RequestParam(defaultValue = "10") int pageSize,
-                                                                        @RequestParam(required = false) String sortBy,
+    @GetMapping("/private/districts/{districtId}/wards")
+    public ApiResponse<PageResponse<WardResponse>> fetchWardsByDistrict(@ParameterObject @PageableDefault Pageable pageable,
                                                                         @Min(value = 1, message = "provinceId phải lớn hơn 0")
                                                                             @PathVariable Integer districtId) {
+        log.info("Received request to fetch all Ward By District");
+
         return ApiResponse.<PageResponse<WardResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Fetch All Wards for District")
-                .result(districtService.fetchWardsByDistrictId(pageNo, pageSize, sortBy, districtId))
+                .result(districtService.fetchWardsByDistrictId(pageable, districtId))
                 .build();
     }
 

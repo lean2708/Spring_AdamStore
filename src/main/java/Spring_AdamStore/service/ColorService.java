@@ -5,14 +5,13 @@ import Spring_AdamStore.dto.request.PromotionRequest;
 import Spring_AdamStore.dto.response.ColorResponse;
 import Spring_AdamStore.dto.response.PageResponse;
 import Spring_AdamStore.dto.response.PromotionResponse;
+import org.springframework.data.domain.Pageable;
 
 public interface ColorService {
 
     ColorResponse create(ColorRequest request);
 
-    ColorResponse fetchById(Long id);
-
-    PageResponse<ColorResponse> fetchAll(int pageNo, int pageSize, String sortBy);
+    PageResponse<ColorResponse> fetchAll(Pageable pageable);
 
     ColorResponse update(Long id, ColorRequest request);
 

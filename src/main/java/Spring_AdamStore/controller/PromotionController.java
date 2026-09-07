@@ -13,9 +13,15 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j(topic = "PROMOTION-CONTROLLER")
 @RequiredArgsConstructor
@@ -26,8 +32,11 @@ public class PromotionController {
 
     private final PromotionService promotionService;
 
-    @PostMapping("/promotions")
+
+    @PostMapping("/admin/promotions")
     public ApiResponse<PromotionResponse> create(@Valid @RequestBody PromotionRequest request){
+        log.info("Received request to create Promotion: {}", request);
+
         return ApiResponse.<PromotionResponse>builder()
                 .code(HttpStatus.CREATED.value())
                 .message("Create Promotion")
@@ -36,9 +45,11 @@ public class PromotionController {
     }
 
 
-    @GetMapping("/promotions/{id}")
+    @GetMapping("/private/promotions/{id}")
     public ApiResponse<PromotionResponse> fetchById(@Min(value = 1, message = "ID phải lớn hơn 0")
                                                   @PathVariable Long id){
+        log.info("Received request to fetch Promotion by id: {}", id);
+
         return ApiResponse.<PromotionResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Fetch Promotion By Id")
@@ -48,21 +59,37 @@ public class PromotionController {
 
 
     @Operation(summary = "Fetch All Promotions For Admin")
-    @GetMapping("/promotions")
-    public ApiResponse<PageResponse<PromotionResponse>> fetchAll(@Min(value = 1, message = "pageNo phải lớn hơn 0")
-                                                               @RequestParam(defaultValue = "1") int pageNo,
-                                                               @RequestParam(defaultValue = "10") int pageSize,
-                                                               @RequestParam(required = false) String sortBy){
+    @GetMapping("/admin/promotions")
+    public ApiResponse<PageResponse<PromotionResponse>> fetchAll(@ParameterObject @PageableDefault Pageable pageable){
+        log.info("Received request to fetch all Promotion for admin");
+
         return ApiResponse.<PageResponse<PromotionResponse>>builder()
                 .code(HttpStatus.OK.value())
-                .result(promotionService.fetchAll(pageNo, pageSize, sortBy))
+                .result(promotionService.fetchAll(pageable))
                 .message("Fetch All Promotions For Admin")
                 .build();
     }
 
-    @PutMapping("/promotions/{id}")
+
+    @Operation(description = "Api này dùng để search Promotions, giá trị của search: field~value hoặc field>value hoặc field<value")
+    @GetMapping("/public/promotions/search")
+    public ApiResponse<PageResponse<PromotionResponse>> searchPromotion(@ParameterObject @PageableDefault Pageable pageable,
+                                                              @RequestParam(required = false) List<String> search){
+        log.info("Received request to Search Promotions with pageable: {} and search params: {}", pageable, search);
+
+        return ApiResponse.<PageResponse<PromotionResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .result(promotionService.searchPromotion(pageable, search))
+                .message("Search Promotions based on attributes with pagination")
+                .build();
+    }
+
+
+    @PutMapping("/admin/promotions/{id}")
     public ApiResponse<PromotionResponse> update(@Min(value = 1, message = "ID phải lớn hơn 0")
                                                @PathVariable Long id, @Valid @RequestBody PromotionUpdateRequest request){
+        log.info("Received request to update Promotion: {}, with Promotion id: {}", request, id);
+
         return ApiResponse.<PromotionResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Update Promotion By Id")
@@ -71,10 +98,13 @@ public class PromotionController {
     }
 
 
+
     @Operation(summary = "Soft delete Promotion")
-    @DeleteMapping("/promotions/{id}")
+    @DeleteMapping("/admin/promotions/{id}")
     public ApiResponse<Void> delete(@Min(value = 1, message = "ID phải lớn hơn 0")
                                     @PathVariable Long id){
+        log.info("Received request to delete Promotion by id: {}", id);
+
         promotionService.delete(id);
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.NO_CONTENT.value())
@@ -83,11 +113,14 @@ public class PromotionController {
                 .build();
     }
 
+
     @Operation(summary = "Restore Promotion",
     description = "Api này để khôi phục Promotion")
-    @PatchMapping("/promotions/{id}/restore")
+    @PatchMapping("/admin/promotions/{id}/restore")
     public ApiResponse<PromotionResponse> restore(@Min(value = 1, message = "Id phải lớn hơn 0")
                                                  @PathVariable long id) {
+        log.info("Received request to restore Promotion by id: {}", id);
+
         return ApiResponse.<PromotionResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Restore Promotion By Id")

@@ -4,9 +4,8 @@ import Spring_AdamStore.dto.request.*;
 import Spring_AdamStore.dto.response.TokenResponse;
 import Spring_AdamStore.dto.response.UserResponse;
 import Spring_AdamStore.dto.response.VerificationCodeResponse;
-import Spring_AdamStore.entity.RedisVerificationCode;
 import com.nimbusds.jose.JOSEException;
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 
 import java.text.ParseException;
 
@@ -27,4 +26,5 @@ public interface AuthService {
     void logout(TokenRequest request) throws ParseException, JOSEException;
 
 
+    TokenResponse loginWithGoogle(String code) throws JOSEException;
 }

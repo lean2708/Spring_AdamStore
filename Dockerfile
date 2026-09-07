@@ -13,6 +13,9 @@ FROM amazoncorretto:17.0.14-alpine3.21
 
 WORKDIR /app
 
+# Cài fontconfig + fonts
+RUN apk add --no-cache fontconfig ttf-dejavu
+
 # Copy file JAR từ bước build vào container
 COPY --from=build /app/target/*.jar app.jar
 

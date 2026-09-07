@@ -6,10 +6,9 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
 @Getter
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SizeRequest {
 
     @NotBlank(message = "name không được để trống")
-    String name;
+    private String name;
 
 }

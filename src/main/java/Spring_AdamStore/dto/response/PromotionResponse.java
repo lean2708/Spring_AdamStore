@@ -16,21 +16,17 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PromotionResponse {
 
-    Long id;
+    private Long id;
 
-    String code;
-    String description;
-    Integer discountPercent;
-    LocalDate startDate;
-    LocalDate endDate;
-    @Enumerated(EnumType.STRING)
-    EntityStatus status;
+    private String code;
+    private String description;
+    private Integer discountPercent;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private EntityStatus status;
 
-    String createdBy;
-    String updatedBy;
-    LocalDate createdAt;
-    LocalDate updatedAt;
+    private String createdBy;
+    private LocalDate createdAt;
 }

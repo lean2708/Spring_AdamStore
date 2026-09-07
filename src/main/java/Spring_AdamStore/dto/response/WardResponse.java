@@ -3,7 +3,6 @@ package Spring_AdamStore.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
 @Builder
@@ -11,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public class WardResponse {
 
-   String code;
-   String name;
+   private String code;
+   private String name;
 
 }

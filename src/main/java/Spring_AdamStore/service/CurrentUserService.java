@@ -1,9 +1,9 @@
 package Spring_AdamStore.service;
 
-import Spring_AdamStore.entity.User;
+import Spring_AdamStore.entity.sql.User;
 import Spring_AdamStore.exception.AppException;
 import Spring_AdamStore.exception.ErrorCode;
-import Spring_AdamStore.repository.UserRepository;
+import Spring_AdamStore.repository.sql.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,8 @@
 package Spring_AdamStore.service;
 
 import Spring_AdamStore.constants.TokenType;
-import Spring_AdamStore.entity.User;
+import Spring_AdamStore.entity.sql.User;
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.KeyLengthException;
 import com.nimbusds.jwt.SignedJWT;
 
 import java.text.ParseException;

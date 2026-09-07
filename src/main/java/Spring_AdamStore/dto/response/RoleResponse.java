@@ -15,11 +15,10 @@ import java.util.Set;
 @NoArgsConstructor
 public class RoleResponse {
 
-    Long id;
-    String name;
-    String description;
+    private Long id;
+    private String name;
+    private String description;
 
-    Set<EntityBasic> permissions;
 
 
 }

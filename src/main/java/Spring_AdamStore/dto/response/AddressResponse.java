@@ -2,17 +2,9 @@ package Spring_AdamStore.dto.response;
 
 import Spring_AdamStore.constants.EntityStatus;
 import Spring_AdamStore.dto.basic.EntityBasic;
-import Spring_AdamStore.dto.basic.UserBasic;
 import Spring_AdamStore.dto.basic.WardBasic;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
 @Builder
@@ -20,24 +12,22 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AddressResponse {
 
-    Long id;
+    private Long id;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    String userName;
-    @Enumerated(EnumType.STRING)
-    EntityStatus status;
+    private Boolean isDefault;
 
-    Boolean isVisible;
+    private Boolean isVisible;
 
+    private EntityStatus status;
 
-    Boolean isDefault;
-    String streetDetail;
+    private String phone;
+    private String streetDetail;
 
-    WardBasic ward;
+    private WardBasic ward;
 
-    EntityBasic district;
+    private EntityBasic district;
 
-    EntityBasic province;
+    private EntityBasic province;
 
 
 }

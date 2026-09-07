@@ -3,9 +3,7 @@ package Spring_AdamStore.mapper;
 import Spring_AdamStore.dto.basic.EntityBasic;
 import Spring_AdamStore.dto.request.CategoryRequest;
 import Spring_AdamStore.dto.response.CategoryResponse;
-import Spring_AdamStore.dto.response.ProductResponse;
-import Spring_AdamStore.entity.Category;
-import Spring_AdamStore.entity.Product;
+import Spring_AdamStore.entity.sql.Category;
 import org.mapstruct.*;
 
 import java.util.List;

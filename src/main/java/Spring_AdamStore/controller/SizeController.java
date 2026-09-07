@@ -13,6 +13,9 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,24 +29,14 @@ public class SizeController {
 
     private final SizeService sizeService;
 
-    @GetMapping("/sizes/{id}")
-    public ApiResponse<SizeResponse> fetchById(@Min(value = 1, message = "ID phải lớn hơn 0")
-                                                @PathVariable Long id){
-        return ApiResponse.<SizeResponse>builder()
-                .code(HttpStatus.OK.value())
-                .message("Fetch Size By Id")
-                .result(sizeService.fetchById(id))
-                .build();
-    }
+    @GetMapping("/public/sizes")
+    public ApiResponse<PageResponse<SizeResponse>> fetchAll(@ParameterObject @PageableDefault Pageable pageable){
 
-    @GetMapping("/sizes")
-    public ApiResponse<PageResponse<SizeResponse>> fetchAll(@Min(value = 1, message = "pageNo phải lớn hơn 0")
-                                                             @RequestParam(defaultValue = "1") int pageNo,
-                                                             @RequestParam(defaultValue = "10") int pageSize,
-                                                             @RequestParam(required = false) String sortBy){
+        log.info("Received request to fetch all Size");
+
         return ApiResponse.<PageResponse<SizeResponse>>builder()
                 .code(HttpStatus.OK.value())
-                .result(sizeService.fetchAll(pageNo, pageSize, sortBy))
+                .result(sizeService.fetchAll(pageable))
                 .message("Fetch All Sizes With Pagination")
                 .build();
     }
